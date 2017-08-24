@@ -10,7 +10,8 @@
 		<module>eurekaserver</module>
 		<module>service1</module>
 		<module>service2</module>
-	</modules>
+        <module>zipkinserver</module>
+    </modules>
 	<packaging>pom</packaging>
 
 	<name>netflix-demo</name>

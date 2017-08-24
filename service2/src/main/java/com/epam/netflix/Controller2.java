@@ -4,6 +4,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.sleuth.annotation.NewSpan;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,6 +20,9 @@ public class Controller2 {
     @Autowired
     Service1FeignClient service1FeignClient;
 
+    @Autowired
+    DemoCall demoCall;
+
     @RequestMapping("/serviceInfo")
     public List<ServiceInstance> getAvailableServices() {
       return discoveryClient.getInstances(OTHER_SERVICE_NAME);
@@ -27,10 +31,17 @@ public class Controller2 {
     @RequestMapping("/service1Call")
     @HystrixCommand(fallbackMethod = "notWorking")
     public String service1Call() {
+        newCall();
+        demoCall.hiHello();
         return service1FeignClient.helloFromOtherService();
     }
 
     private String notWorking() {
         return "Service 1 not available, we are working on this issue with very high priority etc";
+    }
+
+    @NewSpan("demoSpan")
+    private void newCall() {
+        System.out.print("sdghisdfkghjkld");
     }
 }
